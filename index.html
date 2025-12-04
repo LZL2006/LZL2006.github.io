@@ -9,34 +9,40 @@
         :root {
             --primary-color: #0d2e59; /* 警院深蓝 */
             --accent-color: #3498db;
-            --star-bg: #030612; /* 深邃星空底色 */
-            --card-bg: rgba(255, 255, 255, 0.15); /* 卡片更透明，透出星空 */
-            --text-color: #ffffff; /* 主文字改为白色 */
+            --bg-gradient-1: #0f2027;
+            --bg-gradient-2: #203a43;
+            --bg-gradient-3: #2c5364;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text-color: #333333;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
-            background-color: var(--star-bg); /* 星空底色 */
+            /* --- 动态流光壁纸 (更深邃的极光色) --- */
+            background: linear-gradient(-45deg, var(--bg-gradient-1), var(--bg-gradient-2), var(--bg-gradient-3), #1a1a2e);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
             color: var(--text-color);
             min-height: 100vh;
             overflow-x: hidden;
             position: relative;
         }
 
-        /* --- 0. 星空和烟花画布 (全屏覆盖，位于背景) --- */
-        #star-canvas {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -10; /* 确保它在所有内容和登录层后面 */
-        }
+        /* --- 0. 烟花画布 (全屏覆盖，穿透点击) --- */
         #fireworks-canvas {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 99999; /* 烟花仍在最顶层 */
-            pointer-events: none; 
+            z-index: 99999; /* 最顶层 */
+            pointer-events: none; /* 让鼠标点击能穿透画布操作下面的按钮 */
         }
 
         /* --- 动画定义 --- */
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0px); } }
         @keyframes rippleEffect { to { transform: scale(4); opacity: 0; } }
@@ -47,15 +53,12 @@
             position: absolute; border-radius: 50%; transform: scale(0);
             animation: rippleEffect 0.6s linear; background-color: rgba(255, 255, 255, 0.4); pointer-events: none;
         }
-        .link-card span.ripple, .social-item span.ripple, .nav-btn span.ripple { 
-             /* 在透明卡片上使用亮色涟漪 */
-             background-color: rgba(255, 255, 255, 0.3); 
-        }
+        .link-card span.ripple, .nav-btn span.ripple, .social-item span.ripple { background-color: rgba(0, 0, 0, 0.1); }
 
         /* --- 1. 登录界面 --- */
         #login-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(3, 6, 18, 0.9); /* 登录页背景变暗，星空半透 */
+            background: linear-gradient(135deg, #000000, #141E30);
             display: flex; justify-content: center; align-items: center;
             z-index: 10000; transition: opacity 0.5s ease, visibility 0.5s;
         }
@@ -65,7 +68,7 @@
             animation: fadeInUp 0.8s ease;
         }
         .login-title { color: #fff; margin-bottom: 20px; letter-spacing: 2px; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
-        .login-input { padding: 12px; border-radius: 8px; border: none; outline: none; width: 250px; margin-bottom: 15px; background: rgba(255, 255, 255, 0.9); font-size: 1rem; text-align: center; color: #333; }
+        .login-input { padding: 12px; border-radius: 8px; border: none; outline: none; width: 250px; margin-bottom: 15px; background: rgba(255, 255, 255, 0.9); font-size: 1rem; text-align: center; }
         .login-btn { background: var(--accent-color); color: #fff; border: none; padding: 12px 30px; border-radius: 25px; font-size: 1rem; transition: all 0.2s; width: 100%; }
         .login-btn:hover { background: #2980b9; box-shadow: 0 0 15px var(--accent-color); }
 
@@ -73,21 +76,20 @@
         #main-content { display: none; flex-direction: column; align-items: center; padding: 20px; padding-bottom: 80px; opacity: 0; transition: opacity 1s ease; }
 
         .profile-section {
-            width: 100%; max-width: 800px; background: var(--card-bg); border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.4); margin-bottom: 30px; overflow: hidden; text-align: center; animation: fadeInUp 0.8s ease 0.2s backwards;
-            backdrop-filter: blur(10px); /* 玻璃效果增强 */
+            width: 100%; max-width: 800px; background: var(--card-bg); border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); margin-bottom: 30px; overflow: hidden; text-align: center; animation: fadeInUp 0.8s ease 0.2s backwards;
         }
         .card-header { background: linear-gradient(135deg, var(--primary-color), var(--accent-color)); height: 120px; position: relative; }
         .avatar {
-            width: 110px; height: 110px; border-radius: 50%; border: 4px solid #fff; background-color: #fff; position: absolute; left: 50%; bottom: -55px; transform: translateX(-50%);
+            width: 110px; height: 110px; border-radius: 50%; border: 4px solid var(--card-bg); background-color: #fff; position: absolute; left: 50%; bottom: -55px; transform: translateX(-50%);
             background-image: url('./avatar.jpg'), url('https://api.dicebear.com/7.x/initials/svg?seed=LZL&backgroundColor=0d2e59&color=ffffff');
             background-size: cover; background-position: center; animation: float 6s ease-in-out infinite; 
         }
         .card-body { padding: 65px 20px 20px; }
-        .name { font-size: 1.6rem; color: #fff; font-weight: bold; margin-bottom: 5px; text-shadow: 0 1px 3px rgba(0,0,0,0.5); }
-        .university { background: rgba(255,255,255,0.1); padding: 4px 12px; border-radius: 12px; font-size: 0.9rem; color: #eee; display: inline-block; margin-bottom: 15px; }
+        .name { font-size: 1.6rem; color: var(--primary-color); font-weight: bold; margin-bottom: 5px; }
+        .university { background: #eef2f7; padding: 4px 12px; border-radius: 12px; font-size: 0.9rem; color: #666; display: inline-block; margin-bottom: 15px; }
         .social-links { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-bottom: 10px; }
-        .social-item { display: flex; align-items: center; gap: 5px; font-size: 0.9rem; color: #fff; text-decoration: none; padding: 5px 10px; border-radius: 8px; transition: all 0.2s; }
-        .social-item:hover { background-color: rgba(255,255,255,0.1); color: var(--accent-color); transform: translateY(-2px); }
+        .social-item { display: flex; align-items: center; gap: 5px; font-size: 0.9rem; color: #555; text-decoration: none; padding: 5px 10px; border-radius: 8px; transition: all 0.2s; }
+        .social-item:hover { background-color: #f0f0f0; color: var(--accent-color); transform: translateY(-2px); }
 
         .nav-switch { display: flex; gap: 20px; margin-bottom: 25px; animation: fadeInUp 0.8s ease 0.4s backwards; }
         .nav-btn { padding: 10px 25px; border: none; background: transparent; font-size: 1.1rem; color: rgba(255,255,255,0.7); position: relative; font-weight: bold; transition: color 0.3s; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
@@ -97,18 +99,17 @@
         .content-area { width: 100%; max-width: 1000px; min-height: 400px; position: relative; }
         .link-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; animation: fadeInUp 0.8s ease 0.5s backwards; }
         .link-card {
-            background: var(--card-bg); border-radius: 10px; padding: 15px; display: flex; align-items: center; gap: 12px; text-decoration: none; color: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.3); transition: all 0.3s ease; border: 1px solid transparent;
-            backdrop-filter: blur(5px);
+            background: var(--card-bg); border-radius: 10px; padding: 15px; display: flex; align-items: center; gap: 12px; text-decoration: none; color: #444; box-shadow: 0 2px 8px rgba(0,0,0,0.03); transition: all 0.3s ease; border: 1px solid transparent;
         }
-        .link-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.4); border-color: var(--accent-color); background: rgba(255,255,255,0.2); }
+        .link-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.2); border-color: var(--accent-color); background: #fff; }
         .link-icon { width: 24px; height: 24px; border-radius: 4px; flex-shrink: 0; }
         .link-title { font-size: 0.95rem; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
 
         #blog-container { display: none; flex-direction: column; gap: 20px; animation: fadeInUp 0.5s ease; }
-        .blog-post { background: var(--card-bg); padding: 25px; border-radius: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.3); transition: transform 0.3s; backdrop-filter: blur(5px); }
+        .blog-post { background: var(--card-bg); padding: 25px; border-radius: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); transition: transform 0.3s; }
         .blog-post:hover { transform: translateY(-2px); }
-        .blog-title { font-size: 1.3rem; color: #fff; margin-bottom: 10px; text-shadow: 0 1px 2px rgba(0,0,0,0.8); }
-        .blog-date { font-size: 0.8rem; color: #ccc; margin-bottom: 15px; display: block; }
+        .blog-title { font-size: 1.3rem; color: var(--primary-color); margin-bottom: 10px; }
+        .blog-date { font-size: 0.8rem; color: #999; margin-bottom: 15px; display: block; }
 
         /* --- 底部音乐律动条 (Visualizer) --- */
         #music-visualizer {
@@ -118,10 +119,12 @@
             opacity: 0; transition: opacity 0.5s;
         }
         #music-visualizer.active { opacity: 1; }
+        
         .bar {
             width: 6px; background: rgba(255, 255, 255, 0.3); border-radius: 5px 5px 0 0;
             animation: none;
         }
+        /* 律动动画 - 不同高度和速度 */
         #music-visualizer.active .bar { animation: dance 1s ease-in-out infinite; }
         @keyframes dance {
             0% { height: 5px; } 50% { height: 40px; background: var(--accent-color); box-shadow: 0 0 10px var(--accent-color); } 100% { height: 5px; }
@@ -129,19 +132,22 @@
         
         /* --- 音乐悬浮球 --- */
         .music-control {
-            position: fixed; bottom: 30px; right: 30px; width: 50px; height: 50px; background: rgba(255,255,255,0.9); color: #333; border-radius: 50%; box-shadow: 0 0 20px rgba(0,0,0,0.3); display: flex; justify-content: center; align-items: center; z-index: 100; transition: transform 0.3s;
+            position: fixed; bottom: 30px; right: 30px; width: 50px; height: 50px; background: #fff; border-radius: 50%; box-shadow: 0 0 20px rgba(0,0,0,0.3); display: flex; justify-content: center; align-items: center; z-index: 100; transition: transform 0.3s;
         }
         .music-control:hover { transform: scale(1.1) rotate(360deg); }
         .music-playing { animation: spin 4s linear infinite; border: 2px solid var(--accent-color); }
         @keyframes spin { 100% { transform: rotate(360deg); } }
 
         footer { margin-top: 50px; margin-bottom: 20px; color: rgba(255,255,255,0.6); font-size: 0.8rem; text-align: center; }
+
+        @media (max-width: 600px) {
+            .link-grid { grid-template-columns: 1fr; }
+            .login-input { width: 100%; }
+        }
     </style>
 </head>
 <body>
 
-    <canvas id="star-canvas"></canvas>
-    
     <canvas id="fireworks-canvas"></canvas>
 
     <div id="login-screen">
@@ -168,7 +174,7 @@
                 <div class="social-links">
                     <a href="mqqwpa://im/chat?chat_type=wpa&uin=3525613509" class="social-item ripple-btn"><i class="fab fa-qq" style="color:#12b7f5;"></i> 3525613509</a>
                     <a href="https://search.bilibili.com/upuser?keyword=李许巍" target="_blank" class="social-item ripple-btn"><i class="fab fa-bilibili" style="color:#fb7299;"></i> 李许巍</a>
-                    <a href="https://github.com/lZl2006" target="_blank" class="social-item ripple-btn"><i class="fab fa-github" style="color:#fff;"></i> lZl2006</a>
+                    <a href="https://github.com/lZl2006" target="_blank" class="social-item ripple-btn"><i class="fab fa-github"></i> lZl2006</a>
                 </div>
             </div>
         </div>
@@ -180,25 +186,28 @@
 
         <div class="content-area">
             <div class="link-grid" id="linksContainer"></div>
+
             <div id="blog-container">
                 <div class="blog-post">
-                    <h3 class="blog-title">✨ 网站升级：星空降临！</h3>
-                    <span class="blog-date">2025-12-04</span>
-                    <p class="blog-content" style="color: #eee;">
-                        今天，我们告别了流光背景，迎来了**动态星空壁纸**！<br>
-                        整个网站现在沉浸在宇宙的浩瀚之中，透明的玻璃卡片让星光透入。<br><br>
-                        记住：点击屏幕依然会燃放烟花哦！
+                    <h3 class="blog-title">✨ 网站完全体进化达成！</h3>
+                    <span class="blog-date">2024-05-23</span>
+                    <p class="blog-content">
+                        今天为网站添加了三个炫酷的功能：<br>
+                        1. <b>触屏烟花</b>：点击屏幕任何地方，都会绽放绚丽的烟花。<br>
+                        2. <b>底部律动</b>：音乐播放时，底部会出现动态的音频波形。<br>
+                        3. <b>动态壁纸</b>：背景现在是极光流动的动态效果。<br>
+                        这就是代码的魅力！
                     </p>
                 </div>
                 <div class="blog-post">
                     <h3 class="blog-title">你好，世界！</h3>
                     <span class="blog-date">2024-05-20</span>
-                    <p class="blog-content" style="color: #eee;">欢迎来到我的个人主页！这里记录我的学习与生活。</p>
+                    <p class="blog-content">欢迎来到我的个人主页！这里记录我的学习与生活。</p>
                 </div>
             </div>
         </div>
 
-        <footer>&copy; 2025 Li Zhenliang. Powered by Stars & Code.</footer>
+        <footer>&copy; 2024 Li Zhenliang. Powered by Code & Music.</footer>
 
         <div class="music-control ripple-btn" onclick="toggleMusic()">
             <i class="fas fa-music"></i>
@@ -208,83 +217,17 @@
     <script>
         const correctPassword = "123456"; 
 
-        // --- A. 动态星空背景逻辑 (Stars) ---
-        const starCanvas = document.getElementById('star-canvas');
-        const starCtx = starCanvas.getContext('2d');
-        let stars = [];
-        const STAR_COUNT = 300; // 星星数量
-
-        function resizeStarCanvas() {
-            starCanvas.width = window.innerWidth;
-            starCanvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resizeStarCanvas);
-        resizeStarCanvas();
-
-        class Star {
-            constructor() {
-                this.x = Math.random() * starCanvas.width;
-                this.y = Math.random() * starCanvas.height;
-                this.radius = Math.random() * 1.5 + 0.5; // 半径 0.5 到 2
-                this.alpha = Math.random();
-                this.velocity = { x: (Math.random() - 0.5) * 0.05, y: (Math.random() - 0.5) * 0.05 }; // 微弱移动
-            }
-            draw() {
-                starCtx.beginPath();
-                starCtx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-                starCtx.fillStyle = `rgba(255, 255, 255, ${this.alpha})`;
-                starCtx.fill();
-            }
-            update() {
-                // 星星闪烁 (alpha 随时间变化)
-                this.alpha += Math.sin(Date.now() * 0.001 * this.radius) * 0.01;
-                if (this.alpha > 1) this.alpha = 1;
-                if (this.alpha < 0.2) this.alpha = 0.2;
-
-                // 保持微弱的移动
-                this.x += this.velocity.x;
-                this.y += this.velocity.y;
-
-                // 边界处理
-                if (this.x < 0 || this.x > starCanvas.width || this.y < 0 || this.y > starCanvas.height) {
-                    this.x = Math.random() * starCanvas.width;
-                    this.y = Math.random() * starCanvas.height;
-                }
-            }
-        }
-
-        function initStars() {
-            for (let i = 0; i < STAR_COUNT; i++) {
-                stars.push(new Star());
-            }
-        }
-
-        function animateStars() {
-            requestAnimationFrame(animateStars);
-            starCtx.fillStyle = 'rgba(3, 6, 18, 0.1)'; // 微弱拖尾效果
-            starCtx.fillRect(0, 0, starCanvas.width, starCanvas.height);
-            
-            stars.forEach(star => {
-                star.update();
-                star.draw();
-            });
-        }
-
-        initStars();
-        animateStars();
-
-
-        // --- B. 烟花特效逻辑 (Fireworks) ---
-        const fireworksCanvas = document.getElementById('fireworks-canvas');
-        const ctx = fireworksCanvas.getContext('2d');
+        // --- A. 烟花特效逻辑 (Fireworks) ---
+        const canvas = document.getElementById('fireworks-canvas');
+        const ctx = canvas.getContext('2d');
         let particles = [];
 
-        function resizeFireworksCanvas() {
-            fireworksCanvas.width = window.innerWidth;
-            fireworksCanvas.height = window.innerHeight;
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
         }
-        window.addEventListener('resize', resizeFireworksCanvas);
-        resizeFireworksCanvas();
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
 
         class Particle {
             constructor(x, y, color) {
@@ -319,30 +262,32 @@
 
         function animateFireworks() {
             requestAnimationFrame(animateFireworks);
-            ctx.clearRect(0, 0, fireworksCanvas.width, fireworksCanvas.height);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
             particles.forEach((p, index) => {
                 if (p.life > 0 && p.alpha > 0) { p.update(); p.draw(); } else { particles.splice(index, 1); }
             });
         }
         animateFireworks();
 
+        // 监听点击和触摸生成烟花
         document.addEventListener('mousedown', (e) => createExplosion(e.clientX, e.clientY));
         document.addEventListener('touchstart', (e) => {
             const touch = e.touches[0];
             createExplosion(touch.clientX, touch.clientY);
         });
 
-        // --- C. 底部音乐律动条生成 ---
+        // --- B. 底部音乐律动条生成 ---
         const visualizerContainer = document.getElementById('music-visualizer');
         for(let i=0; i<40; i++) {
             const bar = document.createElement('div');
             bar.classList.add('bar');
+            // 随机动画延迟，制造波浪感
             bar.style.animationDuration = (Math.random() * 0.5 + 0.5) + 's'; 
             bar.style.height = (Math.random() * 20 + 5) + 'px';
             visualizerContainer.appendChild(bar);
         }
 
-        // --- D. 登录与音乐控制 ---
+        // --- C. 登录与音乐控制 ---
         function checkPassword() {
             if (document.getElementById('password-input').value === correctPassword) {
                 document.getElementById('login-screen').style.opacity = '0';
@@ -383,7 +328,7 @@
             }
         }
 
-        // --- E. 涟漪和Tab逻辑 ---
+        // --- D. 涟漪和Tab逻辑 ---
         function createRipple(e) {
             const btn = e.currentTarget;
             const circle = document.createElement("span");
@@ -405,7 +350,7 @@
             document.getElementById('blog-container').style.display = t === 'bookmarks' ? 'none' : 'flex';
         }
 
-        // --- F. 数据加载 ---
+        // --- E. 数据加载 ---
         const bookmarks = [
             { title: "GitHub - Termux", url: "https://github.com/termux/termux-app#github" },
             { title: "SP刷机工具错误信息", url: "https://blog.csdn.net/a394116741/article/details/121332881" },
