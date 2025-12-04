@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>李振亮 | 个人主页</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #0d2e59; /* 警院深蓝色风格 */
+            --accent-color: #3498db;
+            --bg-color: #f3f4f6;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .profile-card {
+            background: var(--card-bg);
+            width: 100%;
+            max-width: 400px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .profile-card:hover {
+            transform: translateY(-5px);
+        }
+
+        /* 顶部背景图区域 */
+        .card-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            height: 120px;
+            position: relative;
+        }
+
+        /* 头像区域 */
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 5px solid var(--card-bg);
+            background-color: #ddd;
+            position: absolute;
+            left: 50%;
+            bottom: -60px;
+            transform: translateX(-50%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 3rem;
+            color: #fff;
+            background-image: url('https://api.dicebear.com/7.x/avataaars/svg?seed=LiZhenliang'); /* 自动生成的随机头像 */
+            background-size: cover;
+        }
+
+        .card-body {
+            padding-top: 70px;
+            padding-bottom: 30px;
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+        .name {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: var(--primary-color);
+        }
+
+        .university {
+            color: #666;
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+            display: inline-block;
+            background: #eef2f7;
+            padding: 5px 15px;
+            border-radius: 15px;
+        }
+
+        .info-list {
+            list-style: none;
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            transition: background 0.2s;
+        }
+
+        .info-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .info-item i {
+            width: 30px;
+            font-size: 1.2rem;
+            margin-right: 15px;
+            text-align: center;
+        }
+
+        /* 图标颜色定制 */
+        .fa-user { color: #f1c40f; }
+        .fa-qq { color: #12b7f5; }
+        .fa-bilibili { color: #fb7299; } /* B站粉 */
+        .fa-github { color: #333; }
+        .fa-graduation-cap { color: var(--primary-color); }
+
+        .info-text {
+            flex-grow: 1;
+        }
+
+        .label {
+            font-size: 0.8rem;
+            color: #888;
+            display: block;
+        }
+
+        .value {
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        /* 链接悬停效果 */
+        a.value:hover {
+            color: var(--accent-color);
+            text-decoration: underline;
+        }
+
+        footer {
+            margin-top: 20px;
+            font-size: 0.8rem;
+            color: #aaa;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="profile-card">
+        <div class="card-header">
+            <div class="avatar" title="头像"></div>
+        </div>
+
+        <div class="card-body">
+            <h1 class="name">李振亮</h1>
+            <div class="university">
+                <i class="fas fa-university"></i> 江西警察学院
+            </div>
+
+            <ul class="info-list">
+                <li class="info-item">
+                    <i class="fas fa-user"></i>
+                    <div class="info-text">
+                        <span class="label">年龄</span>
+                        <span class="value">19 岁</span>
+                    </div>
+                </li>
+
+                <li class="info-item">
+                    <i class="fab fa-qq"></i>
+                    <div class="info-text">
+                        <span class="label">QQ</span>
+                        <a href="mqqwpa://im/chat?chat_type=wpa&uin=3525613509&version=1&src_type=web&web_src=oicqzone.com" class="value">3525613509</a>
+                    </div>
+                </li>
+
+                <li class="info-item">
+                    <i class="fab fa-bilibili"></i> <div class="info-text">
+                        <span class="label">Bilibili</span>
+                        <a href="https://search.bilibili.com/upuser?keyword=李许巍" target="_blank" class="value">李许巍</a>
+                    </div>
+                </li>
+
+                <li class="info-item">
+                    <i class="fab fa-github"></i>
+                    <div class="info-text">
+                        <span class="label">GitHub</span>
+                        <a href="https://github.com/lZl2006" target="_blank" class="value">lZl2006</a>
+                    </div>
+                </li>
+            </ul>
+
+            <footer>
+                &copy; 2023-2024 Li Zhenliang. All Rights Reserved.
+            </footer>
+        </div>
+    </div>
+
+</body>
+</html><!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>李振亮 | 个人主页</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #0d2e59; /* 警院深蓝色风格 */
+            --accent-color: #3498db;
+            --bg-color: #f3f4f6;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .profile-card {
+            background: var(--card-bg);
+            width: 100%;
+            max-width: 400px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .profile-card:hover {
+            transform: translateY(-5px);
+        }
+
+        /* 顶部背景图区域 */
+        .card-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            height: 120px;
+            position: relative;
+        }
+
+        /* 头像区域 */
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 5px solid var(--card-bg);
+            background-color: #ddd;
+            position: absolute;
+            left: 50%;
+            bottom: -60px;
+            transform: translateX(-50%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 3rem;
+            color: #fff;
+            background-image: url('https://api.dicebear.com/7.x/avataaars/svg?seed=LiZhenliang'); /* 自动生成的随机头像 */
+            background-size: cover;
+        }
+
+        .card-body {
+            padding-top: 70px;
+            padding-bottom: 30px;
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+        .name {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: var(--primary-color);
+        }
+
+        .university {
+            color: #666;
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+            display: inline-block;
+            background: #eef2f7;
+            padding: 5px 15px;
+            border-radius: 15px;
+        }
+
+        .info-list {
+            list-style: none;
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            transition: background 0.2s;
+        }
+
+        .info-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .info-item i {
+            width: 30px;
+            font-size: 1.2rem;
+            margin-right: 15px;
+            text-align: center;
+        }
+
+        /* 图标颜色定制 */
+        .fa-user { color: #f1c40f; }
+        .fa-qq { color: #12b7f5; }
+        .fa-bilibili { color: #fb7299; } /* B站粉 */
+        .fa-github { color: #333; }
+        .fa-graduation-cap { color: var(--primary-color); }
+
+        .info-text {
+            flex-grow: 1;
+        }
+
+        .label {
+            font-size: 0.8rem;
+            color: #888;
+            display: block;
+        }
+
+        .value {
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        /* 链接悬停效果 */
+        a.value:hover {
+            color: var(--accent-color);
+            text-decoration: underline;
+        }
+
+        footer {
+            margin-top: 20px;
+            font-size: 0.8rem;
+            color: #aaa;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="profile-card">
+        <div class="card-header">
+            <div class="avatar" title="头像"></div>
+        </div>
+
+        <div class="card-body">
+            <h1 class="name">李振亮</h1>
+            <div class="university">
+                <i class="fas fa-university"></i> 江西警察学院
+            </div>
+
+            <ul class="info-list">
+                <li class="info-item">
+                    <i class="fas fa-user"></i>
+                    <div class="info-text">
+                        <span class="label">年龄</span>
+                        <span class="value">19 岁</span>
+                    </div>
+                </li>
+
+                <li class="info-item">
+                    <i class="fab fa-qq"></i>
+                    <div class="info-text">
+                        <span class="label">QQ</span>
+                        <a href="mqqwpa://im/chat?chat_type=wpa&uin=3525613509&version=1&src_type=web&web_src=oicqzone.com" class="value">3525613509</a>
+                    </div>
+                </li>
+
+                <li class="info-item">
+                    <i class="fab fa-bilibili"></i> <div class="info-text">
+                        <span class="label">Bilibili</span>
+                        <a href="https://search.bilibili.com/upuser?keyword=李许巍" target="_blank" class="value">李许巍</a>
+                    </div>
+                </li>
+
+                <li class="info-item">
+                    <i class="fab fa-github"></i>
+                    <div class="info-text">
+                        <span class="label">GitHub</span>
+                        <a href="https://github.com/lZl2006" target="_blank" class="value">lZl2006</a>
+                    </div>
+                </li>
+            </ul>
+
+            <footer>
+                &copy; 2023-2024 Li Zhenliang. All Rights Reserved.
+            </footer>
+        </div>
+    </div>
+
+</body>
+</html>
