@@ -3,217 +3,298 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>李振亮 | 个人主页</title>
+    <title>李振亮 | 个人导航站</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary-color: #0d2e59; /* 警院深蓝色风格 */
+            --primary-color: #0d2e59; /* 警院深蓝 */
             --accent-color: #3498db;
-            --bg-color: #f3f4f6;
+            --bg-color: #f0f2f5;
             --card-bg: #ffffff;
             --text-color: #333333;
+            --link-hover-bg: #eef7ff;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
+            padding: 20px;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
             min-height: 100vh;
-            padding: 20px;
         }
 
-        .profile-card {
-            background: var(--card-bg);
+        /* --- 个人信息卡片区域 --- */
+        .profile-section {
             width: 100%;
-            max-width: 400px;
+            max-width: 800px;
+            background: var(--card-bg);
             border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             text-align: center;
-            transition: transform 0.3s ease;
         }
 
-        .profile-card:hover {
-            transform: translateY(-5px);
-        }
-
-        /* 顶部背景图区域 */
         .card-header {
             background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
-            height: 120px;
+            width: 100%;
+            height: 100px;
             position: relative;
         }
 
-        /* 头像区域 */
         .avatar {
-            width: 120px;
-            height: 120px;
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
-            border: 5px solid var(--card-bg);
-            background-color: #ddd;
+            border: 4px solid var(--card-bg);
+            background-color: #fff;
             position: absolute;
             left: 50%;
-            bottom: -60px;
+            bottom: -50px;
             transform: translateX(-50%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 3rem;
-            color: #fff;
-            background-image: url('https://api.dicebear.com/7.x/avataaars/svg?seed=LiZhenliang'); /* 自动生成的随机头像 */
+            /* 这里使用您的照片，请确保文件夹里有 avatar.jpg，如果没有则显示默认 */
+            background-image: url('./avatar.jpg'), url('https://api.dicebear.com/7.x/initials/svg?seed=LZL&backgroundColor=0d2e59&color=ffffff'); 
             background-size: cover;
+            background-position: center;
         }
 
         .card-body {
-            padding-top: 70px;
-            padding-bottom: 30px;
-            padding-left: 20px;
-            padding-right: 20px;
+            padding: 60px 20px 20px;
+            width: 100%;
         }
 
-        .name {
-            font-size: 1.8rem;
-            font-weight: bold;
-            margin-bottom: 5px;
+        .name { font-size: 1.5rem; color: var(--primary-color); font-weight: bold; margin-bottom: 5px; }
+        .university { background: #eef2f7; padding: 4px 12px; border-radius: 12px; font-size: 0.9rem; color: #666; display: inline-block; margin-bottom: 15px; }
+
+        .social-links { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-bottom: 10px; }
+        .social-item { display: flex; align-items: center; gap: 5px; font-size: 0.9rem; color: #555; text-decoration: none; padding: 5px 10px; border-radius: 8px; transition: background 0.2s; }
+        .social-item:hover { background-color: #f0f0f0; color: var(--accent-color); }
+        .social-item i { font-size: 1.1rem; }
+
+        /* --- 收藏夹导航网格区域 --- */
+        .bookmarks-section {
+            width: 100%;
+            max-width: 1000px;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
             color: var(--primary-color);
+            margin-bottom: 15px;
+            border-left: 5px solid var(--accent-color);
+            padding-left: 10px;
+            font-weight: bold;
         }
 
-        .university {
-            color: #666;
-            font-size: 0.95rem;
-            margin-bottom: 20px;
-            display: inline-block;
-            background: #eef2f7;
-            padding: 5px 15px;
-            border-radius: 15px;
+        .link-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
         }
 
-        .info-list {
-            list-style: none;
-            margin-top: 20px;
-            text-align: left;
-        }
-
-        .info-item {
+        .link-card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 15px;
             display: flex;
             align-items: center;
-            padding: 12px 15px;
-            margin-bottom: 10px;
-            border-radius: 10px;
-            transition: background 0.2s;
+            gap: 12px;
+            text-decoration: none;
+            color: #444;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
         }
 
-        .info-item:hover {
-            background-color: #f8f9fa;
+        .link-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-color: var(--accent-color);
+            background-color: var(--link-hover-bg);
         }
 
-        .info-item i {
-            width: 30px;
-            font-size: 1.2rem;
-            margin-right: 15px;
-            text-align: center;
+        .link-icon {
+            width: 24px;
+            height: 24px;
+            flex-shrink: 0;
+            border-radius: 4px;
         }
 
-        /* 图标颜色定制 */
-        .fa-user { color: #f1c40f; }
-        .fa-qq { color: #12b7f5; }
-        .fa-bilibili { color: #fb7299; } /* B站粉 */
-        .fa-github { color: #333; }
-        .fa-graduation-cap { color: var(--primary-color); }
-
-        .info-text {
-            flex-grow: 1;
+        .link-info {
+            overflow: hidden;
         }
 
-        .label {
-            font-size: 0.8rem;
-            color: #888;
+        .link-title {
+            font-size: 0.95rem;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
             display: block;
         }
 
-        .value {
-            font-size: 1rem;
-            font-weight: 500;
+        .link-desc {
+            font-size: 0.75rem;
+            color: #888;
+            margin-top: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
-        a {
-            text-decoration: none;
-            color: inherit;
+        @media (max-width: 600px) {
+            .link-grid { grid-template-columns: 1fr; } /* 手机端单列显示 */
+            .profile-section { border-radius: 0 0 20px 20px; margin-top: -20px; }
         }
         
-        /* 链接悬停效果 */
-        a.value:hover {
-            color: var(--accent-color);
-            text-decoration: underline;
-        }
-
-        footer {
-            margin-top: 20px;
-            font-size: 0.8rem;
-            color: #aaa;
-        }
+        footer { margin-top: 40px; color: #999; font-size: 0.8rem; }
     </style>
 </head>
 <body>
 
-    <div class="profile-card">
+    <div class="profile-section">
         <div class="card-header">
-            <div class="avatar" title="头像"></div>
+            <div class="avatar"></div>
         </div>
-
         <div class="card-body">
             <h1 class="name">李振亮</h1>
-            <div class="university">
-                <i class="fas fa-university"></i> 江西警察学院
+            <div class="university"><i class="fas fa-graduation-cap"></i> 江西警察学院 | 19岁</div>
+            
+            <div class="social-links">
+                <a href="mqqwpa://im/chat?chat_type=wpa&uin=3525613509" class="social-item">
+                    <i class="fab fa-qq" style="color:#12b7f5;"></i> 3525613509
+                </a>
+                <a href="https://search.bilibili.com/upuser?keyword=李许巍" target="_blank" class="social-item">
+                    <i class="fab fa-bilibili" style="color:#fb7299;"></i> 李许巍
+                </a>
+                <a href="https://github.com/lZl2006" target="_blank" class="social-item">
+                    <i class="fab fa-github"></i> lZl2006
+                </a>
             </div>
-
-            <ul class="info-list">
-                <li class="info-item">
-                    <i class="fas fa-user"></i>
-                    <div class="info-text">
-                        <span class="label">年龄</span>
-                        <span class="value">19 岁</span>
-                    </div>
-                </li>
-
-                <li class="info-item">
-                    <i class="fab fa-qq"></i>
-                    <div class="info-text">
-                        <span class="label">QQ</span>
-                        <a href="mqqwpa://im/chat?chat_type=wpa&uin=3525613509&version=1&src_type=web&web_src=oicqzone.com" class="value">3525613509</a>
-                    </div>
-                </li>
-
-                <li class="info-item">
-                    <i class="fab fa-bilibili"></i> <div class="info-text">
-                        <span class="label">Bilibili</span>
-                        <a href="https://m.bilibili.com/space/470831665?from=search" target="_blank" class="value">李许巍</a>
-                    </div>
-                </li>
-
-                <li class="info-item">
-                    <i class="fab fa-github"></i>
-                    <div class="info-text">
-                        <span class="label">GitHub</span>
-                        <a href="https://github.com/lZl2006" target="_blank" class="value">lZl2006</a>
-                    </div>
-                </li>
-            </ul>
-
-            <footer>
-                &copy; 2023-2024 Li Zhenliang. All Rights Reserved.
-            </footer>
         </div>
     </div>
+
+    <div class="bookmarks-section">
+        <div class="section-title">我的收藏夹 / Knowledge Base</div>
+        <div class="link-grid" id="linksContainer">
+            </div>
+    </div>
+
+    <footer>
+        &copy; 2024 Li Zhenliang. All Rights Reserved.
+    </footer>
+
+    <script>
+        // 这里存储了您提供的所有收藏链接
+        // 自动提取域名获取图标，无需手动上传图片
+        const bookmarks = [
+            { title: "GitHub - Termux", url: "https://github.com/termux/termux-app#github" },
+            { title: "SP刷机工具错误信息", url: "https://blog.csdn.net/a394116741/article/details/121332881" },
+            { title: "Quantum Algorithm", url: "https://dl.acm.org/doi/10.1145/3517340" },
+            { title: "秘塔写作猫", url: "https://xiezuocat.com/#/" },
+            { title: "网易订阅 - 细胞转录组", url: "https://www.163.com/dy/article/HFEJ2M9I051191KO.html" },
+            { title: "Rufus 启动盘制作", url: "https://rufus.ie/downloads/" },
+            { title: "SpaceWeather", url: "https://www.spaceweather.com/" },
+            { title: "BioRxiv - TARDIS", url: "https://www.biorxiv.org/content/10.1101/2022.10.30.514301v1" },
+            { title: "CentOS 7.6 下载", url: "https://blog.csdn.net/weixin_44650967/article/details/119596295" },
+            { title: "CentOS ISO 镜像站", url: "http://mirror.nsc.liu.se/centos-store/7.6.1810/isos/x86_64/" },
+            { title: "完美网址导航", url: "https://www.9eip.com/" },
+            { title: "思古导航", url: "https://sigu.app/" },
+            { title: "Science Cast", url: "https://sciencecast.org/" },
+            { title: "Chromium Projects", url: "https://www.chromium.org/chromium-projects/" },
+            { title: "VulDB 漏洞数据库", url: "https://vuldb.com/zh/?" },
+            { title: "ONFIX 固件维修", url: "https://onfix.cn/rom" },
+            { title: "百度 EFE 技术体系", url: "https://ecomfe.github.io/" },
+            { title: "果核剥壳", url: "https://www.ghxi.com/" },
+            { title: "MSMG Toolkit", url: "https://msmgtoolkit.in/" },
+            { title: "94Speed 加速", url: "https://www.94speed.com/" },
+            { title: "Neat Download Manager", url: "https://malltt.lanpw.com/iNmny1lynhwj" },
+            { title: "OpenWrt 论坛", url: "https://forum.openwrt.org/c/announcements/14" },
+            { title: "恢复 Nahimic", url: "https://nahimic.helprace.com/i751-updated-how-to-recover-nahimic-with-one-click" },
+            { title: "B站 - C语言视频教程", url: "https://www.bilibili.com/video/BV1Ps411U7tS/" },
+            { title: "高校教学管理平台", url: "http://jw.jxga.edu.cn/jxjcxyjw/frame/homes.html" },
+            { title: "VMware 17 安装教程", url: "https://www.bilibili.com/read/cv26972711/" },
+            { title: "Kali ARP 讲解", url: "https://www.bilibili.com/video/BV1ho4y1D7vh/" },
+            { title: "求知讲堂 C/C++", url: "https://www.bilibili.com/video/av374923818/" },
+            { title: "博客园 - gxngxngxn", url: "https://www.cnblogs.com/gxngxngxn" },
+            { title: "赣CTF (新生赛道)", url: "http://8.138.137.98:1145/games/1" },
+            { title: "2500PK 下载", url: "http://2500pk.com/" },
+            { title: "兔哥博客 - 免费神器", url: "https://uuzi.net/top-10-free-software-better-than-microsoft-default-apps/" },
+            { title: "GitHub 主页", url: "https://github.com/" },
+            { title: "Intel UHD 710 规格", url: "https://www.techpowerup.com/gpu-specs/uhd-graphics-710-mobile.c4128" },
+            { title: "知乎 - C4D教程", url: "https://zhuanlan.zhihu.com/p/26277569" },
+            { title: "Windows 办公软件推荐", url: "https://www.msn.cn/zh-cn/news/other/8%E6%AC%BE%E5%AE%9E%E7%94%A8%E6%80%A7%E5%BE%88%E5%BC%BA%E7%9A%84windows%E5%8A%9E%E5%85%AC%E8%BD%AF%E4%BB%B6/ar-AA1vvVOs" },
+            { title: "ThinkPHP 官网", url: "https://www.thinkphp.cn/" },
+            { title: "远程控制软件推荐", url: "https://www.msn.cn/zh-cn/news/other/%E8%BF%9C%E7%A8%8B%E6%8E%A7%E5%88%B6%E8%BD%AF%E4%BB%B6%E5%93%AA%E4%B8%AA%E5%A5%BD%E7%94%A8-11%E6%AC%BE%E5%A5%BD%E7%94%A8%E8%BD%AF%E4%BB%B6%E5%A4%A7%E6%94%BE%E9%80%81/ar-BB1rmDAG" },
+            { title: "阻击者联盟", url: "https://blog.h-acker.cn/" },
+            { title: "SiliconCloud", url: "https://cloud.siliconflow.cn/playground/chat/17885302724" },
+            { title: "GitCode", url: "https://gitcode.com/?is_default=1&word=docker" },
+            { title: "菜鸟教程", url: "https://www.runoob.com/" },
+            { title: "Open WebUI Docs", url: "https://docs.openwebui.com/" },
+            { title: "B站 - 黑马前端教程", url: "https://www.bilibili.com/video/BV1cf4y1j7hL/" },
+            { title: "B站 - DeepSeek 玩法", url: "https://www.bilibili.com/video/BV1ttASeUEAj/" },
+            { title: "B站 - AI做PPT教程", url: "https://www.bilibili.com/video/BV17sAte3Exh/" },
+            { title: "B站 - DeepSeek 微信", url: "https://www.bilibili.com/video/BV1mLAeerEe6/" },
+            { title: "B站 - PPT生成", url: "https://www.bilibili.com/video/BV1gLALefEGL/" },
+            { title: "知乎 - 绑定GitHub", url: "https://zhuanlan.zhihu.com/p/103391101" },
+            { title: "蓝奏云 - DLL修复", url: "https://ruanjianvip.lanzouv.com/iQJ892l4ro0j" },
+            { title: "B站 - Sunshine串流", url: "https://www.bilibili.com/opus/908194044769730565" },
+            { title: "微软 VC++ 下载", url: "https://learn.microsoft.com/zh-cn/cpp/windows/latest-supported-vc-redist?view=msvc-170" },
+            { title: "GitHub - fengye97", url: "https://github.com/fengye97" },
+            { title: "零度博客 - 免费VPN", url: "https://www.freedidi.com/13533.html" },
+            { title: "知乎 - 外贸神器", url: "https://www.zhihu.com/question/394372326" },
+            { title: "企鹅官网", url: "https://www.qiekj.com/" },
+            { title: "ZoogVPN 下载", url: "https://app.zoogvpn.com/setup/downloads" },
+            { title: "硅云在线", url: "https://siliconcloud.cn/" },
+            { title: "Hexo 官网", url: "https://hexo.io/zh-cn/" },
+            { title: "B站 - Win10 优化", url: "https://www.bilibili.com/opus/381694688494274436" },
+            { title: "Massgrave (Windows激活)", url: "https://massgrave.dev/genuine-installation-media" },
+            { title: "Office Tool Plus", url: "https://otp.landian.vip/zh-cn/" },
+            { title: "AIGC 工具导航", url: "https://www.aigc.cn/" },
+            { title: "Blender 中国", url: "https://www.blendercn.org/downloadme#xiazai" },
+            { title: "宝塔 Windows 面板", url: "https://www.bt.cn/new/product_windows.html" },
+            { title: "JSON 在线解析", url: "https://www.sojson.com/json/" },
+            { title: "ITDog Ping 测试", url: "https://www.itdog.cn/ping/baidu.com" },
+            { title: "DNS 泄露测试", url: "https://dnsleaktest.com/results.html" },
+            { title: "时光's Blog", url: "https://blog.wwang.pw/" },
+            { title: "小众技术工具库", url: "https://www.xiaozhongjishu.com/?from=itab" }
+        ];
+
+        // 渲染函数
+        const container = document.getElementById('linksContainer');
+        
+        bookmarks.forEach(item => {
+            // 获取域名用于显示图标
+            let domain = '';
+            try {
+                const urlObj = new URL(item.url);
+                domain = urlObj.hostname;
+            } catch(e) {
+                domain = 'google.com'; // 默认回退
+            }
+            
+            // 构建图标 URL (使用 Google Favicon 服务)
+            const iconUrl = `https://www.google.com/s2/favicons?domain=${domain}&sz=32`;
+
+            const linkHtml = `
+                <a href="${item.url}" class="link-card" target="_blank">
+                    <img src="${iconUrl}" class="link-icon" alt="icon" onerror="this.src='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/svgs/solid/globe.svg'">
+                    <div class="link-info">
+                        <span class="link-title">${item.title}</span>
+                    </div>
+                </a>
+            `;
+            container.innerHTML += linkHtml;
+        });
+    </script>
 
 </body>
 </html>
