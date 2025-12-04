@@ -2,18 +2,17 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>李振亮 | 个人空间</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --primary-color: #0d2e59; /* 警院深蓝 */
             --accent-color: #3498db;
-            --bg-gradient-1: #0d2e59;
-            --bg-gradient-2: #2c3e50;
-            --bg-gradient-3: #3498db;
-            --bg-gradient-4: #f0f2f5;
-            --card-bg: #ffffff;
+            --bg-gradient-1: #0f2027;
+            --bg-gradient-2: #203a43;
+            --bg-gradient-3: #2c5364;
+            --card-bg: rgba(255, 255, 255, 0.95);
             --text-color: #333333;
         }
 
@@ -21,178 +20,135 @@
 
         body {
             font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
-            /* --- 新增：动态背景流光动画 --- */
-            background: linear-gradient(-45deg, var(--bg-gradient-1), var(--bg-gradient-2), var(--bg-gradient-3), var(--bg-gradient-4));
+            /* --- 动态流光壁纸 (更深邃的极光色) --- */
+            background: linear-gradient(-45deg, var(--bg-gradient-1), var(--bg-gradient-2), var(--bg-gradient-3), #1a1a2e);
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
-            /* ------------------------- */
             color: var(--text-color);
             min-height: 100vh;
             overflow-x: hidden;
+            position: relative;
+        }
+
+        /* --- 0. 烟花画布 (全屏覆盖，穿透点击) --- */
+        #fireworks-canvas {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 99999; /* 最顶层 */
+            pointer-events: none; /* 让鼠标点击能穿透画布操作下面的按钮 */
         }
 
         /* --- 动画定义 --- */
-        /* 背景流光动画关键帧 */
         @keyframes gradientBG {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0px); } }
+        @keyframes rippleEffect { to { transform: scale(4); opacity: 0; } }
 
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
-        }
-
-        /* 点击涟漪动画关键帧 */
-        @keyframes rippleEffect {
-            to { transform: scale(4); opacity: 0; }
-        }
-
-        /* --- 通用交互元素样式 (用于涟漪效果) --- */
-        /* 任何带有此类的元素点击都会有涟漪 */
-        .ripple-btn {
-            position: relative;
-            overflow: hidden; /* 确保涟漪不溢出边界 */
-            cursor: pointer;
-        }
-
-        /* 涟漪本身的样式（由JS动态添加） */
+        /* --- 涟漪效果 --- */
+        .ripple-btn { position: relative; overflow: hidden; cursor: pointer; }
         span.ripple {
-            position: absolute;
-            border-radius: 50%;
-            transform: scale(0);
-            animation: rippleEffect 0.6s linear;
-            background-color: rgba(255, 255, 255, 0.4); /* 默认浅色涟漪 */
-            pointer-events: none; /* 防止遮挡点击 */
+            position: absolute; border-radius: 50%; transform: scale(0);
+            animation: rippleEffect 0.6s linear; background-color: rgba(255, 255, 255, 0.4); pointer-events: none;
         }
-        /* 深色背景上的涟漪颜色调整 */
-        .link-card span.ripple, .nav-btn span.ripple, .social-item span.ripple {
-             background-color: rgba(0, 0, 0, 0.1); /* 深色涟漪 */
-        }
+        .link-card span.ripple, .nav-btn span.ripple, .social-item span.ripple { background-color: rgba(0, 0, 0, 0.1); }
 
-
-        /* --- 1. 登录界面样式 --- */
+        /* --- 1. 登录界面 --- */
         #login-screen {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            /* 登录页保持深色背景强调沉浸感 */
-            background: linear-gradient(135deg, var(--primary-color), #000);
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, #000000, #141E30);
             display: flex; justify-content: center; align-items: center;
-            z-index: 9999; transition: opacity 0.5s ease, visibility 0.5s;
+            z-index: 10000; transition: opacity 0.5s ease, visibility 0.5s;
         }
-
         .login-box {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            padding: 40px;
-            border-radius: 20px;
-            text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(15px); padding: 40px; border-radius: 20px;
+            text-align: center; border: 1px solid rgba(255, 255, 255, 0.2); box-shadow: 0 0 50px rgba(0,198,255,0.2);
             animation: fadeInUp 0.8s ease;
         }
+        .login-title { color: #fff; margin-bottom: 20px; letter-spacing: 2px; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
+        .login-input { padding: 12px; border-radius: 8px; border: none; outline: none; width: 250px; margin-bottom: 15px; background: rgba(255, 255, 255, 0.9); font-size: 1rem; text-align: center; }
+        .login-btn { background: var(--accent-color); color: #fff; border: none; padding: 12px 30px; border-radius: 25px; font-size: 1rem; transition: all 0.2s; width: 100%; }
+        .login-btn:hover { background: #2980b9; box-shadow: 0 0 15px var(--accent-color); }
 
-        .login-title { color: #fff; margin-bottom: 20px; letter-spacing: 2px; }
-        
-        .login-input {
-            padding: 12px; border-radius: 8px; border: none; outline: none; width: 250px; margin-bottom: 15px; background: rgba(255, 255, 255, 0.9); font-size: 1rem; text-align: center;
-        }
+        /* --- 2. 主界面 --- */
+        #main-content { display: none; flex-direction: column; align-items: center; padding: 20px; padding-bottom: 80px; opacity: 0; transition: opacity 1s ease; }
 
-        .login-btn {
-            background: var(--accent-color); color: #fff; border: none; padding: 12px 30px; border-radius: 25px; font-size: 1rem; transition: transform 0.2s, background 0.2s; width: 100%;
-            /* 添加 ripple-btn 类用于JS识别 */
-        }
-        .login-btn:hover { background: #2980b9; transform: scale(1.05); }
-
-        /* --- 2. 主界面样式 (默认隐藏) --- */
-        #main-content {
-            display: none; flex-direction: column; align-items: center; padding: 20px; opacity: 0; transition: opacity 1s ease;
-        }
-
-        /* --- 个人信息卡片 --- */
         .profile-section {
-            width: 100%; max-width: 800px; background: var(--card-bg); border-radius: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); margin-bottom: 30px; overflow: hidden; text-align: center; animation: fadeInUp 0.8s ease 0.2s backwards;
+            width: 100%; max-width: 800px; background: var(--card-bg); border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); margin-bottom: 30px; overflow: hidden; text-align: center; animation: fadeInUp 0.8s ease 0.2s backwards;
         }
-
-        .card-header {
-            background: linear-gradient(135deg, var(--primary-color), var(--accent-color)); height: 120px; position: relative;
-        }
-
+        .card-header { background: linear-gradient(135deg, var(--primary-color), var(--accent-color)); height: 120px; position: relative; }
         .avatar {
             width: 110px; height: 110px; border-radius: 50%; border: 4px solid var(--card-bg); background-color: #fff; position: absolute; left: 50%; bottom: -55px; transform: translateX(-50%);
             background-image: url('./avatar.jpg'), url('https://api.dicebear.com/7.x/initials/svg?seed=LZL&backgroundColor=0d2e59&color=ffffff');
             background-size: cover; background-position: center; animation: float 6s ease-in-out infinite; 
         }
-
         .card-body { padding: 65px 20px 20px; }
         .name { font-size: 1.6rem; color: var(--primary-color); font-weight: bold; margin-bottom: 5px; }
         .university { background: #eef2f7; padding: 4px 12px; border-radius: 12px; font-size: 0.9rem; color: #666; display: inline-block; margin-bottom: 15px; }
-        
         .social-links { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-bottom: 10px; }
         .social-item { display: flex; align-items: center; gap: 5px; font-size: 0.9rem; color: #555; text-decoration: none; padding: 5px 10px; border-radius: 8px; transition: all 0.2s; }
         .social-item:hover { background-color: #f0f0f0; color: var(--accent-color); transform: translateY(-2px); }
 
-        /* --- 切换导航栏 --- */
-        .nav-switch {
-            display: flex; gap: 20px; margin-bottom: 25px; animation: fadeInUp 0.8s ease 0.4s backwards;
-        }
-        .nav-btn {
-            padding: 10px 25px; border: none; background: transparent; font-size: 1.1rem; color: #888; position: relative; font-weight: bold; transition: color 0.3s;
-        }
-        .nav-btn.active { color: var(--primary-color); }
-        .nav-btn.active::after {
-            content: ''; position: absolute; bottom: 0; left: 10%; width: 80%; height: 3px; background: var(--accent-color); border-radius: 2px;
-        }
+        .nav-switch { display: flex; gap: 20px; margin-bottom: 25px; animation: fadeInUp 0.8s ease 0.4s backwards; }
+        .nav-btn { padding: 10px 25px; border: none; background: transparent; font-size: 1.1rem; color: rgba(255,255,255,0.7); position: relative; font-weight: bold; transition: color 0.3s; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
+        .nav-btn.active { color: #fff; }
+        .nav-btn.active::after { content: ''; position: absolute; bottom: 0; left: 10%; width: 80%; height: 3px; background: var(--accent-color); border-radius: 2px; box-shadow: 0 0 10px var(--accent-color); }
 
-        /* --- 内容区域 --- */
         .content-area { width: 100%; max-width: 1000px; min-height: 400px; position: relative; }
-
-        /* 链接网格 */
-        .link-grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; animation: fadeInUp 0.8s ease 0.5s backwards;
-        }
+        .link-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; animation: fadeInUp 0.8s ease 0.5s backwards; }
         .link-card {
             background: var(--card-bg); border-radius: 10px; padding: 15px; display: flex; align-items: center; gap: 12px; text-decoration: none; color: #444; box-shadow: 0 2px 8px rgba(0,0,0,0.03); transition: all 0.3s ease; border: 1px solid transparent;
         }
-        .link-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); border-color: var(--accent-color); }
+        .link-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.2); border-color: var(--accent-color); background: #fff; }
         .link-icon { width: 24px; height: 24px; border-radius: 4px; flex-shrink: 0; }
         .link-title { font-size: 0.95rem; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
 
-        /* 博客文章区域 */
         #blog-container { display: none; flex-direction: column; gap: 20px; animation: fadeInUp 0.5s ease; }
-        .blog-post {
-            background: #fff; padding: 25px; border-radius: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); transition: transform 0.3s;
-        }
+        .blog-post { background: var(--card-bg); padding: 25px; border-radius: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); transition: transform 0.3s; }
         .blog-post:hover { transform: translateY(-2px); }
         .blog-title { font-size: 1.3rem; color: var(--primary-color); margin-bottom: 10px; }
         .blog-date { font-size: 0.8rem; color: #999; margin-bottom: 15px; display: block; }
-        .blog-content { color: #555; line-height: 1.6; font-size: 0.95rem; }
 
-        /* --- 音乐控制悬浮球 --- */
+        /* --- 底部音乐律动条 (Visualizer) --- */
+        #music-visualizer {
+            position: fixed; bottom: 0; left: 0; width: 100%; height: 60px;
+            display: flex; justify-content: center; align-items: flex-end; gap: 5px;
+            pointer-events: none; z-index: 50; padding-bottom: 5px;
+            opacity: 0; transition: opacity 0.5s;
+        }
+        #music-visualizer.active { opacity: 1; }
+        
+        .bar {
+            width: 6px; background: rgba(255, 255, 255, 0.3); border-radius: 5px 5px 0 0;
+            animation: none;
+        }
+        /* 律动动画 - 不同高度和速度 */
+        #music-visualizer.active .bar { animation: dance 1s ease-in-out infinite; }
+        @keyframes dance {
+            0% { height: 5px; } 50% { height: 40px; background: var(--accent-color); box-shadow: 0 0 10px var(--accent-color); } 100% { height: 5px; }
+        }
+        
+        /* --- 音乐悬浮球 --- */
         .music-control {
-            position: fixed; bottom: 30px; right: 30px; width: 50px; height: 50px; background: var(--card-bg); border-radius: 50%; box-shadow: 0 5px 15px rgba(0,0,0,0.2); display: flex; justify-content: center; align-items: center; z-index: 100; transition: transform 0.3s;
+            position: fixed; bottom: 30px; right: 30px; width: 50px; height: 50px; background: #fff; border-radius: 50%; box-shadow: 0 0 20px rgba(0,0,0,0.3); display: flex; justify-content: center; align-items: center; z-index: 100; transition: transform 0.3s;
         }
         .music-control:hover { transform: scale(1.1) rotate(360deg); }
         .music-playing { animation: spin 4s linear infinite; border: 2px solid var(--accent-color); }
         @keyframes spin { 100% { transform: rotate(360deg); } }
 
-        footer { margin-top: 50px; margin-bottom: 20px; color: #999; font-size: 0.8rem; text-align: center; }
+        footer { margin-top: 50px; margin-bottom: 20px; color: rgba(255,255,255,0.6); font-size: 0.8rem; text-align: center; }
 
         @media (max-width: 600px) {
             .link-grid { grid-template-columns: 1fr; }
             .login-input { width: 100%; }
-            .profile-section { margin-top: -20px; border-radius: 0 0 20px 20px; }
         }
     </style>
 </head>
 <body>
+
+    <canvas id="fireworks-canvas"></canvas>
 
     <div id="login-screen">
         <div class="login-box">
@@ -206,6 +162,9 @@
         <source src="https://music.163.com/song/media/outer/url?id=1824045032.mp3" type="audio/mpeg">
     </audio>
 
+    <div id="music-visualizer">
+        </div>
+
     <div id="main-content">
         <div class="profile-section">
             <div class="card-header"><div class="avatar"></div></div>
@@ -213,4 +172,272 @@
                 <h1 class="name">李振亮</h1>
                 <div class="university"><i class="fas fa-graduation-cap"></i> 江西警察学院 | 19岁</div>
                 <div class="social-links">
-                    <a href="mqqwpa://i
+                    <a href="mqqwpa://im/chat?chat_type=wpa&uin=3525613509" class="social-item ripple-btn"><i class="fab fa-qq" style="color:#12b7f5;"></i> 3525613509</a>
+                    <a href="https://search.bilibili.com/upuser?keyword=李许巍" target="_blank" class="social-item ripple-btn"><i class="fab fa-bilibili" style="color:#fb7299;"></i> 李许巍</a>
+                    <a href="https://github.com/lZl2006" target="_blank" class="social-item ripple-btn"><i class="fab fa-github"></i> lZl2006</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="nav-switch">
+            <button class="nav-btn active ripple-btn" onclick="switchTab('bookmarks', this)">资源导航</button>
+            <button class="nav-btn ripple-btn" onclick="switchTab('blog', this)">我的博客</button>
+        </div>
+
+        <div class="content-area">
+            <div class="link-grid" id="linksContainer"></div>
+
+            <div id="blog-container">
+                <div class="blog-post">
+                    <h3 class="blog-title">✨ 网站完全体进化达成！</h3>
+                    <span class="blog-date">2024-05-23</span>
+                    <p class="blog-content">
+                        今天为网站添加了三个炫酷的功能：<br>
+                        1. <b>触屏烟花</b>：点击屏幕任何地方，都会绽放绚丽的烟花。<br>
+                        2. <b>底部律动</b>：音乐播放时，底部会出现动态的音频波形。<br>
+                        3. <b>动态壁纸</b>：背景现在是极光流动的动态效果。<br>
+                        这就是代码的魅力！
+                    </p>
+                </div>
+                <div class="blog-post">
+                    <h3 class="blog-title">你好，世界！</h3>
+                    <span class="blog-date">2024-05-20</span>
+                    <p class="blog-content">欢迎来到我的个人主页！这里记录我的学习与生活。</p>
+                </div>
+            </div>
+        </div>
+
+        <footer>&copy; 2024 Li Zhenliang. Powered by Code & Music.</footer>
+
+        <div class="music-control ripple-btn" onclick="toggleMusic()">
+            <i class="fas fa-music"></i>
+        </div>
+    </div>
+
+    <script>
+        const correctPassword = "123456"; 
+
+        // --- A. 烟花特效逻辑 (Fireworks) ---
+        const canvas = document.getElementById('fireworks-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor(x, y, color) {
+                this.x = x; this.y = y; this.color = color;
+                this.radius = Math.random() * 2 + 1;
+                this.velocity = { x: (Math.random() - 0.5) * 5, y: (Math.random() - 0.5) * 5 };
+                this.alpha = 1; this.life = 100;
+            }
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.alpha;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+                ctx.restore();
+            }
+            update() {
+                this.x += this.velocity.x;
+                this.y += this.velocity.y;
+                this.alpha -= 0.01;
+                this.life--;
+            }
+        }
+
+        function createExplosion(x, y) {
+            const colors = ['#ff4757', '#2ed573', '#1e90ff', '#ffa502', '#ffffff'];
+            for (let i = 0; i < 30; i++) {
+                particles.push(new Particle(x, y, colors[Math.floor(Math.random() * colors.length)]));
+            }
+        }
+
+        function animateFireworks() {
+            requestAnimationFrame(animateFireworks);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach((p, index) => {
+                if (p.life > 0 && p.alpha > 0) { p.update(); p.draw(); } else { particles.splice(index, 1); }
+            });
+        }
+        animateFireworks();
+
+        // 监听点击和触摸生成烟花
+        document.addEventListener('mousedown', (e) => createExplosion(e.clientX, e.clientY));
+        document.addEventListener('touchstart', (e) => {
+            const touch = e.touches[0];
+            createExplosion(touch.clientX, touch.clientY);
+        });
+
+        // --- B. 底部音乐律动条生成 ---
+        const visualizerContainer = document.getElementById('music-visualizer');
+        for(let i=0; i<40; i++) {
+            const bar = document.createElement('div');
+            bar.classList.add('bar');
+            // 随机动画延迟，制造波浪感
+            bar.style.animationDuration = (Math.random() * 0.5 + 0.5) + 's'; 
+            bar.style.height = (Math.random() * 20 + 5) + 'px';
+            visualizerContainer.appendChild(bar);
+        }
+
+        // --- C. 登录与音乐控制 ---
+        function checkPassword() {
+            if (document.getElementById('password-input').value === correctPassword) {
+                document.getElementById('login-screen').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('login-screen').style.visibility = 'hidden';
+                    const mainContent = document.getElementById('main-content');
+                    mainContent.style.display = 'flex';
+                    setTimeout(() => mainContent.style.opacity = '1', 50);
+                    
+                    const audio = document.getElementById('bg-music');
+                    audio.volume = 0.5;
+                    audio.play().then(() => setVisualizerState(true)).catch(() => console.log("需手动播放"));
+                }, 500);
+            } else {
+                alert("密码错误 (123456)");
+                document.getElementById('password-input').value = "";
+            }
+        }
+
+        function toggleMusic() {
+            const audio = document.getElementById('bg-music');
+            if (audio.paused) {
+                audio.play(); setVisualizerState(true);
+            } else {
+                audio.pause(); setVisualizerState(false);
+            }
+        }
+
+        function setVisualizerState(isPlaying) {
+            const btn = document.querySelector('.music-control');
+            const visualizer = document.getElementById('music-visualizer');
+            if (isPlaying) {
+                btn.classList.add('music-playing');
+                visualizer.classList.add('active');
+            } else {
+                btn.classList.remove('music-playing');
+                visualizer.classList.remove('active');
+            }
+        }
+
+        // --- D. 涟漪和Tab逻辑 ---
+        function createRipple(e) {
+            const btn = e.currentTarget;
+            const circle = document.createElement("span");
+            const d = Math.max(btn.clientWidth, btn.clientHeight);
+            circle.style.width = circle.style.height = `${d}px`;
+            circle.style.left = `${e.clientX - btn.getBoundingClientRect().left - d/2}px`;
+            circle.style.top = `${e.clientY - btn.getBoundingClientRect().top - d/2}px`;
+            circle.classList.add("ripple");
+            const old = btn.getElementsByClassName("ripple")[0];
+            if (old) old.remove();
+            btn.appendChild(circle);
+        }
+        function attachRipple() { document.querySelectorAll('.ripple-btn').forEach(b => b.addEventListener('click', createRipple)); }
+        
+        function switchTab(t, b) {
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            b.classList.add('active');
+            document.getElementById('linksContainer').style.display = t === 'bookmarks' ? 'grid' : 'none';
+            document.getElementById('blog-container').style.display = t === 'bookmarks' ? 'none' : 'flex';
+        }
+
+        // --- E. 数据加载 ---
+        const bookmarks = [
+            { title: "GitHub - Termux", url: "https://github.com/termux/termux-app#github" },
+            { title: "SP刷机工具错误信息", url: "https://blog.csdn.net/a394116741/article/details/121332881" },
+            { title: "Quantum Algorithm", url: "https://dl.acm.org/doi/10.1145/3517340" },
+            { title: "秘塔写作猫", url: "https://xiezuocat.com/#/" },
+            { title: "网易订阅 - 细胞转录组", url: "https://www.163.com/dy/article/HFEJ2M9I051191KO.html" },
+            { title: "Rufus 启动盘制作", url: "https://rufus.ie/downloads/" },
+            { title: "SpaceWeather", url: "https://www.spaceweather.com/" },
+            { title: "BioRxiv - TARDIS", url: "https://www.biorxiv.org/content/10.1101/2022.10.30.514301v1" },
+            { title: "CentOS 7.6 下载", url: "https://blog.csdn.net/weixin_44650967/article/details/119596295" },
+            { title: "CentOS ISO 镜像站", url: "http://mirror.nsc.liu.se/centos-store/7.6.1810/isos/x86_64/" },
+            { title: "完美网址导航", url: "https://www.9eip.com/" },
+            { title: "思古导航", url: "https://sigu.app/" },
+            { title: "Science Cast", url: "https://sciencecast.org/" },
+            { title: "Chromium Projects", url: "https://www.chromium.org/chromium-projects/" },
+            { title: "VulDB 漏洞数据库", url: "https://vuldb.com/zh/?" },
+            { title: "ONFIX 固件维修", url: "https://onfix.cn/rom" },
+            { title: "百度 EFE 技术体系", url: "https://ecomfe.github.io/" },
+            { title: "果核剥壳", url: "https://www.ghxi.com/" },
+            { title: "MSMG Toolkit", url: "https://msmgtoolkit.in/" },
+            { title: "94Speed 加速", url: "https://www.94speed.com/" },
+            { title: "Neat Download Manager", url: "https://malltt.lanpw.com/iNmny1lynhwj" },
+            { title: "OpenWrt 论坛", url: "https://forum.openwrt.org/c/announcements/14" },
+            { title: "恢复 Nahimic", url: "https://nahimic.helprace.com/i751-updated-how-to-recover-nahimic-with-one-click" },
+            { title: "B站 - C语言视频教程", url: "https://www.bilibili.com/video/BV1Ps411U7tS/" },
+            { title: "高校教学管理平台", url: "http://jw.jxga.edu.cn/jxjcxyjw/frame/homes.html" },
+            { title: "VMware 17 安装教程", url: "https://www.bilibili.com/read/cv26972711/" },
+            { title: "Kali ARP 讲解", url: "https://www.bilibili.com/video/BV1ho4y1D7vh/" },
+            { title: "求知讲堂 C/C++", url: "https://www.bilibili.com/video/av374923818/" },
+            { title: "博客园 - gxngxngxn", url: "https://www.cnblogs.com/gxngxngxn" },
+            { title: "赣CTF (新生赛道)", url: "http://8.138.137.98:1145/games/1" },
+            { title: "2500PK 下载", url: "http://2500pk.com/" },
+            { title: "兔哥博客 - 免费神器", url: "https://uuzi.net/top-10-free-software-better-than-microsoft-default-apps/" },
+            { title: "GitHub 主页", url: "https://github.com/" },
+            { title: "Intel UHD 710 规格", url: "https://www.techpowerup.com/gpu-specs/uhd-graphics-710-mobile.c4128" },
+            { title: "知乎 - C4D教程", url: "https://zhuanlan.zhihu.com/p/26277569" },
+            { title: "Windows 办公软件推荐", url: "https://www.msn.cn/zh-cn/news/other/8%E6%AC%BE%E5%AE%9E%E7%94%A8%E6%80%A7%E5%BE%88%E5%BC%BA%E7%9A%84windows%E5%8A%9E%E5%85%AC%E8%BD%AF%E4%BB%B6/ar-AA1vvVOs" },
+            { title: "ThinkPHP 官网", url: "https://www.thinkphp.cn/" },
+            { title: "远程控制软件推荐", url: "https://www.msn.cn/zh-cn/news/other/%E8%BF%9C%E7%A8%8B%E6%8E%A7%E5%88%B6%E8%BD%AF%E4%BB%B6%E5%93%AA%E4%B8%AA%E5%A5%BD%E7%94%A8-11%E6%AC%BE%E5%A5%BD%E7%94%A8%E8%BD%AF%E4%BB%B6%E5%A4%A7%E6%94%BE%E9%80%81/ar-BB1rmDAG" },
+            { title: "阻击者联盟", url: "https://blog.h-acker.cn/" },
+            { title: "SiliconCloud", url: "https://cloud.siliconflow.cn/playground/chat/17885302724" },
+            { title: "GitCode", url: "https://gitcode.com/?is_default=1&word=docker" },
+            { title: "菜鸟教程", url: "https://www.runoob.com/" },
+            { title: "Open WebUI Docs", url: "https://docs.openwebui.com/" },
+            { title: "B站 - 黑马前端教程", url: "https://www.bilibili.com/video/BV1cf4y1j7hL/" },
+            { title: "B站 - DeepSeek 玩法", url: "https://www.bilibili.com/video/BV1ttASeUEAj/" },
+            { title: "B站 - AI做PPT教程", url: "https://www.bilibili.com/video/BV17sAte3Exh/" },
+            { title: "B站 - DeepSeek 微信", url: "https://www.bilibili.com/video/BV1mLAeerEe6/" },
+            { title: "B站 - PPT生成", url: "https://www.bilibili.com/video/BV1gLALefEGL/" },
+            { title: "知乎 - 绑定GitHub", url: "https://zhuanlan.zhihu.com/p/103391101" },
+            { title: "蓝奏云 - DLL修复", url: "https://ruanjianvip.lanzouv.com/iQJ892l4ro0j" },
+            { title: "B站 - Sunshine串流", url: "https://www.bilibili.com/opus/908194044769730565" },
+            { title: "微软 VC++ 下载", url: "https://learn.microsoft.com/zh-cn/cpp/windows/latest-supported-vc-redist?view=msvc-170" },
+            { title: "GitHub - fengye97", url: "https://github.com/fengye97" },
+            { title: "零度博客 - 免费VPN", url: "https://www.freedidi.com/13533.html" },
+            { title: "知乎 - 外贸神器", url: "https://www.zhihu.com/question/394372326" },
+            { title: "企鹅官网", url: "https://www.qiekj.com/" },
+            { title: "ZoogVPN 下载", url: "https://app.zoogvpn.com/setup/downloads" },
+            { title: "硅云在线", url: "https://siliconcloud.cn/" },
+            { title: "Hexo 官网", url: "https://hexo.io/zh-cn/" },
+            { title: "B站 - Win10 优化", url: "https://www.bilibili.com/opus/381694688494274436" },
+            { title: "Massgrave (Windows激活)", url: "https://massgrave.dev/genuine-installation-media" },
+            { title: "Office Tool Plus", url: "https://otp.landian.vip/zh-cn/" },
+            { title: "AIGC 工具导航", url: "https://www.aigc.cn/" },
+            { title: "Blender 中国", url: "https://www.blendercn.org/downloadme#xiazai" },
+            { title: "宝塔 Windows 面板", url: "https://www.bt.cn/new/product_windows.html" },
+            { title: "JSON 在线解析", url: "https://www.sojson.com/json/" },
+            { title: "ITDog Ping 测试", url: "https://www.itdog.cn/ping/baidu.com" },
+            { title: "DNS 泄露测试", url: "https://dnsleaktest.com/results.html" },
+            { title: "时光's Blog", url: "https://blog.wwang.pw/" },
+            { title: "小众技术工具库", url: "https://www.xiaozhongjishu.com/?from=itab" }
+        ];
+
+        const container = document.getElementById('linksContainer');
+        bookmarks.forEach(item => {
+            let domain = '';
+            try { domain = new URL(item.url).hostname; } catch(e) { domain = 'google.com'; }
+            const iconUrl = `https://www.google.com/s2/favicons?domain=${domain}&sz=32`;
+            container.innerHTML += `
+                <a href="${item.url}" class="link-card ripple-btn" target="_blank">
+                    <img src="${iconUrl}" class="link-icon" alt="icon" onerror="this.src='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/svgs/solid/globe.svg'">
+                    <span class="link-title">${item.title}</span>
+                </a>`;
+        });
+        
+        attachRipple();
+        document.getElementById('password-input').addEventListener('keypress', (e) => { if(e.key==='Enter') checkPassword(); });
+    </script>
+</body>
+</html>
