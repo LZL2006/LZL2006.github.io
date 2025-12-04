@@ -172,44 +172,81 @@
                 <h1 class="name">李振亮</h1>
                 <div class="university"><i class="fas fa-graduation-cap"></i> 江西警察学院 | 19岁</div>
                 <div class="social-links">
-    <a href="javascript:void(0)" class="social-item ripple-btn" onclick="copyWeChatId(event)"><i class="fab fa-weixin" style="color:#2ecc71;"></i> L15374324282</a>
-    <a href="mqq://im/chat?chat_type=wpa&uin=3525613509&version=1&src_type=web" class="social-item ripple-btn" target="_blank"><i class="fab fa-qq" style="color:#12b7f5;"></i> 3525613509</a>
+                    <a href="javascript:void(0)" class="social-item ripple-btn" onclick="copyAndLaunchWeChat(event)"><i class="fab fa-weixin" style="color:#2ecc71;"></i> L15374324282</a>
+    
+    <a href="javascript:void(0)" class="social-item ripple-btn" onclick="copyAndLaunchQQ(event)"><i class="fab fa-qq" style="color:#12b7f5;"></i> 3525613509</a>
+    
     <a href="https://search.bilibili.com/upuser?keyword=李许巍" target="_blank" class="social-item ripple-btn"><i class="fab fa-bilibili" style="color:#fb7299;"></i> 李许巍</a>
     <a href="https://github.com/lZl2006" target="_blank" class="social-item ripple-btn"><i class="fab fa-github" style="color:#fff;"></i> lZl2006</a>
 </div>
 
 <script>
-    // ... 其他 JS 代码 ...
-
-    function copyWeChatId(e) {
-        const weChatId = 'L15374324282';
-        
-        // 1. 复制到剪贴板 (使用新的Clipboard API以获得更好的兼容性)
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(weChatId).then(() => {
-                // 2. 成功后弹出通知
-                alert(`✅ 微信ID已复制到剪贴板：${weChatId}`);
-            }).catch(err => {
-                console.error('复制失败:', err);
-                alert('❌ 复制失败，请手动复制微信号：' + weChatId);
-            });
-        } else {
-             // 备用方案（旧浏览器兼容）
-            const tempInput = document.createElement('input');
-            tempInput.value = weChatId;
-            document.body.appendChild(tempInput);
-            tempInput.select();
-            document.execCommand('copy');
-            document.body.removeChild(tempInput);
-            alert(`✅ 微信ID已复制到剪贴板：${weChatId}`);
-        }
-
-        // 触发涟漪效果
-        createRipple(e); 
-    }
+function copyAndLaunchWeChat(e) {
+    const weChatId = 'L15374324282';
     
-    // ... 其他 JS 代码 ...
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(weChatId).then(() => {
+            alert(`✅ 微信ID已复制到剪贴板：${weChatId}\n\n请在跳转后的微信App中粘贴搜索添加！`);
+
+            // 尝试拉起微信客户端
+            setTimeout(() => {
+                 window.location.href = 'weixin://'; 
+            }, 300);
+            
+        }).catch(err => {
+            console.error('复制失败:', err);
+            alert('❌ 复制失败，请手动复制微信号：' + weChatId);
+        });
+    } else {
+        // 备用方案
+        const tempInput = document.createElement('input');
+        tempInput.value = weChatId;
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        document.execCommand('copy');
+        document.body.removeChild(tempInput);
+        
+        alert(`✅ 微信ID已复制到剪贴板：${weChatId}\n\n请在微信中粘贴搜索添加！`);
+        window.location.href = 'weixin://'; 
+    }
+    createRipple(e); 
+}
 </script>
+function copyAndLaunchQQ(e) {
+    const qqId = '3525613509';
+    const qqSchemeUrl = `mqq://im/chat?chat_type=wpa&uin=${qqId}&version=1&src_type=web`;
+
+    // 1. 复制到剪贴板
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(qqId).then(() => {
+            // 2. 成功后弹出通知
+            alert(`✅ QQ 号已复制到剪贴板：${qqId}\n\n正在尝试拉起 QQ App...`);
+
+            // 3. 尝试拉起 QQ 客户端
+            setTimeout(() => {
+                 window.location.href = qqSchemeUrl; 
+            }, 300); 
+            
+        }).catch(err => {
+            console.error('复制失败:', err);
+            alert('❌ 复制失败，请手动复制 QQ 号：' + qqId);
+        });
+    } else {
+         // 备用方案 (旧浏览器)
+        const tempInput = document.createElement('input');
+        tempInput.value = qqId;
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        document.execCommand('copy');
+        document.body.removeChild(tempInput);
+        
+        alert(`✅ QQ 号已复制到剪贴板：${qqId}\n\n正在尝试拉起 QQ App...`);
+        
+        // 尝试拉起 QQ 客户端
+        window.location.href = qqSchemeUrl; 
+    }
+    createRipple(e); 
+}
                 </div>
             </div>
         </div>
